@@ -1887,7 +1887,7 @@ div.message.info {
   z-index: 0;
   width: 100%;
   overflow: hidden;
-  background-image: url(./assets/images/forum.jpg);
+/*   background-image: url(./assets/images/forum.jpg); */
   background-size: cover;
   background-position: center;
   display: inline-block;
