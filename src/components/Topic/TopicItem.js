@@ -35,7 +35,7 @@ const TopicItem = ({ topic }) => {
           to={`/user/${topic?.owner?.username}`}
         >
           <Image src={topic?.owner?.avatar?.url} />
-          <h6 className="writer">{`${topic?.owner?.firstName} ${topic?.owner?.lastName}`}</h6>
+          <h6 className="writer">{`${topic?.owner?.username}`}</h6>
         </Link>
 
       </div>
