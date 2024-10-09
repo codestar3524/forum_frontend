@@ -104,7 +104,7 @@ const Header = () => {
                     className="d-flex align-items-center"
                   >
                     <Image src={user?.avatar?.url} />
-                    <span className="user">{`${user?.firstName} ${user?.lastName}`}</span>
+                    <span className="user">{`${user?.username}`}</span>
                     <HiOutlineDotsVertical />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>

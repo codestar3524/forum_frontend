@@ -46,9 +46,6 @@ const EditProfile = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [twitter, setTwitter] = useState("");
-  const [github, setGithub] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -176,41 +173,6 @@ const EditProfile = () => {
                             onChange={(e) => setBio(e.target.value)}
                           />
                           <Form.Label>biography</Form.Label>
-                        </Form.Group>
-                      </div>
-                    </section>
-                    <section>
-                      <h5 className="section-title">external links</h5>
-                      <div className="section-content">
-                        <Form.Group className="form-group mb-3">
-                          <Form.Control
-                            type="text"
-                            placeholder="facebook"
-                            disabled={isLoading}
-                            value={facebook}
-                            onChange={(e) => setFacebook(e.target.value)}
-                          />
-                          <Form.Label>facebook URL</Form.Label>
-                        </Form.Group>
-                        <Form.Group className="form-group mb-3">
-                          <Form.Control
-                            type="text"
-                            placeholder="twitter"
-                            disabled={isLoading}
-                            value={twitter}
-                            onChange={(e) => setTwitter(e.target.value)}
-                          />
-                          <Form.Label>twitter URL</Form.Label>
-                        </Form.Group>
-                        <Form.Group className="form-group mb-3">
-                          <Form.Control
-                            type="text"
-                            placeholder="github"
-                            disabled={isLoading}
-                            value={github}
-                            onChange={(e) => setGithub(e.target.value)}
-                          />
-                          <Form.Label>github URL</Form.Label>
                         </Form.Group>
                       </div>
                     </section>

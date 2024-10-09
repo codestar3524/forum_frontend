@@ -3,10 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button, Image, Nav } from "react-bootstrap";
 import { MdEdit } from "react-icons/md";
 import {
-  RiBallPenFill,
-  RiTwitterFill,
-  RiGithubFill,
-  RiFacebookFill,
+  RiBallPenFill
 } from "react-icons/ri";
 import { SiGooglemessages } from "react-icons/si";
 import { TiGroup } from "react-icons/ti";
@@ -47,7 +44,7 @@ const ProfileHeader = memo(() => {
           <div
             className="user-profile-meta d-flex align-items-center"
             style={{
-              backgroundImage: `linear-gradient(rgb(152 0 69 / 53%), rgb(195 57 25 / 68%)), url(wallpaper.jpg), url(${userProfile?.cover?.url})`,
+              backgroundImage: `linear-gradient(rgb(0 3 152 / 74%), rgb(123 25 195 / 68%)), url(wallpaper.jpg), url(${userProfile?.cover?.url})`,
             }}
           >
             <Link
@@ -78,20 +75,7 @@ const ProfileHeader = memo(() => {
             </div>
           </div>
           <div className="profile-header-section">
-            <div className="social-links">
-              <a
-                href={userProfile?.socialNetwork?.facebook}
-                className="facebook"
-              >
-                <RiFacebookFill />
-              </a>
-              <a href={userProfile?.socialNetwork?.twitter} className="twitter">
-                <RiTwitterFill />
-              </a>
-              <a href={userProfile?.socialNetwork?.github} className="github">
-                <RiGithubFill />
-              </a>
-            </div>
+           
             <Nav as="ul" className="profile-menu">
               <Nav.Link
                 as={Link}

@@ -82,7 +82,7 @@ const Login = () => {
                     <RiUserAddLine />
                   </InputGroup.Text>
                   <Form.Control
-                    type="email"
+                    type="text"
                     name="email"
                     id="email"
                     disabled={isLoading}

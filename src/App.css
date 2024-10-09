@@ -18,7 +18,7 @@
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #5c111f;
+  background-color: #0c3c69;
   opacity: 0.2;
   transition: opacity 2s linear;
 }
@@ -37,7 +37,7 @@
 body {
   font-family: "Varela Round", sans-serif;
   color: #07142e;
-  background-image: url(./assets/images/bg.png);
+  background-image: linear-gradient(117deg, #432e8d 12%, #04001e);
   background-size: cover;
   background-position: left center;
 }
@@ -60,7 +60,7 @@ header {
   right: 0;
   left: 0;
   z-index: 1002;
-  background-image: linear-gradient(98deg, #a32204, #2e063b);
+  background-color:#120233;
   -webkit-box-shadow: 0 -3px 31px 0 rgb(0 0 0 / 5%),
     0 6px 20px 0 rgb(0 0 0 / 2%);
   box-shadow: 0 -3px 31px 0 rgb(0 0 0 / 5%), 0 6px 20px 0 rgb(0 0 0 / 2%);
@@ -72,12 +72,8 @@ header .navbar {
 
 footer {
   padding: 20px;
-  background-color: #390610;
+  background-color:#120233;
   text-align: center;
-  background-image: url(./assets/images/decoration.png);
-  background-size: contain;
-  background-position-y: 27px;
-  background-repeat: repeat-x;
   font-weight: bolder;
   font-size: 18px;
 }
@@ -93,7 +89,7 @@ main .container .edit-profile .left,
 main .container .edit-profile .right,
 main .container .profile .profile-header,
 main .container .profile .profile-info .tab-ui {
-  background-color: #221745a3 !important;
+  background-image: linear-gradient(130deg, #6c9ff86e, #6c67e780, #6e31d773) !important;
 }
 
 
@@ -106,7 +102,6 @@ main,.forum-container {
   max-width: 1360px;
   margin: 80px auto 10px auto;
   padding: 10px;
-  background: #63131bb5;
   border: 1px solid;
   border-radius: 10px;
   min-height: calc(100vh - 158px);
@@ -123,18 +118,18 @@ main,.forum-container {
 }
 
 .main-content {
-  background-color: #221745a3;
+  background-image: linear-gradient(130deg, #6c9ff86e, #6c67e780, #6e31d773);
   padding: 12px;
   margin-bottom: 12px;
   border-radius: 20px;
-  border: 1px solid;
+  border: 3px solid #9563af;
 }
 
 
 .search-control,
 .search-control:focus-within {
   background-color: transparent;
-  border: 1px solid white;
+  border: 3px solid #9563af;
 }
 
 .search-control::placeholder {
@@ -426,8 +421,7 @@ main .container {
 
 main .container .left-sidebar .nav,
 main .container .right-sidebar .nav {
-  background: #fff;
-  border: 1px solid #e6ecf5;
+  border: 3px solid #9563af;
   box-shadow: 0 6px 10px rgb(0 0 0 / 5%);
   border-radius: 6px;
   padding: 10px 15px;
@@ -566,7 +560,6 @@ main .container .custom-select {
 }
 
 main .container .topic-item {
-  background: #fff;
   border: 1px solid #e6ecf5;
   box-shadow: 0 6px 10px rgb(0 0 0 / 5%);
   border-radius: 6px;
@@ -749,7 +742,7 @@ a.new-topic button,
 button.login,
 button.register {
   position: relative;
-  background: #b5052e;
+  background-image: linear-gradient(178deg, #fb8591, #d90082);
   outline: none;
   border: none;
   padding: 11px;
@@ -1168,7 +1161,7 @@ main .container .thread .comments-container .replies-container .comment:last-chi
 
 main .container .profile .profile-header {
   position: relative;
-  background: #fff;
+  background: #510000;
   border: 1px solid #e6ecf5;
   box-shadow: 0 6px 10px rgb(0 0 0 / 5%);
   border-radius: 6px;
@@ -1334,7 +1327,6 @@ main .container .profile .profile-info {
 }
 
 main .container .profile .profile-info .tab-ui {
-  background: #fff;
   border: 1px solid #e6ecf5;
   box-shadow: 0 6px 10px rgb(0 0 0 / 5%);
   border-radius: 6px;
@@ -1616,7 +1608,6 @@ form.floating .form-control:focus~.form-label {
 
 main .container .edit-profile .left,
 main .container .edit-profile .right {
-  background: #fff;
   border: 1px solid #e6ecf5;
   box-shadow: 0 6px 10px rgb(0 0 0 / 5%);
   border-radius: 6px;
@@ -1784,7 +1775,6 @@ main .container .new-topic .new-topic-form {
   position: absolute;
   overflow: hidden;
   padding: 2rem;
-  background: #fff;
   border: 1px solid #e6ecf5;
   box-shadow: 0 6px 10px rgb(0 0 0 / 5%);
   border-radius: 6px;
@@ -1887,7 +1877,7 @@ div.message.info {
   z-index: 0;
   width: 100%;
   overflow: hidden;
-/*   background-image: url(./assets/images/forum.jpg); */
+  background-image: url(./assets/images/forum.jpg);
   background-size: cover;
   background-position: center;
   display: inline-block;

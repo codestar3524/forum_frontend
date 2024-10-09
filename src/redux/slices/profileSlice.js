@@ -26,11 +26,11 @@ export const getUserProfile = createAsyncThunk(
 
 export const getUserComments = createAsyncThunk(
   "profile/getUserComments",
-  async (username) => {
+  async (_id) => {
     try {
       const { data } = await axios.get(
-        `/api/user/${username}/comments`,
-        username
+        `/api/user/${_id}/comments`,
+        _id
       );
       return data;
     } catch (err) {

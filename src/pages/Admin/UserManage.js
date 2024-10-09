@@ -184,27 +184,27 @@ const UserManage = () => {
                                         <td>
                                             {editingUserId === user._id ? (
                                                 <>
-                                                    <Button variant="success" title='Save' onClick={() => handleSaveUser(user._id)}>
+                                                    <Button size='sm' variant="success" title='Save' onClick={() => handleSaveUser(user._id)}>
                                                         <RiSave3Fill />
-                                                    </Button>{' '}
-                                                    <Button variant="danger" title='Cancel' onClick={handleCancelEdit}>
+                                                    </Button>
+                                                    <Button size='sm' variant="danger" title='Cancel' onClick={handleCancelEdit}>
                                                         <RiArrowGoBackFill />
                                                     </Button>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Button variant="primary" title='Edit' onClick={() => handleEditClick(user)}>
+                                                    <Button size='sm' variant="primary" title='Edit' onClick={() => handleEditClick(user)}>
                                                         <RiEdit2Fill />
-                                                    </Button>{' '}
+                                                    </Button>
                                                     {!user.approved ? (
-                                                        <Button variant="success" title='approve' onClick={() => handleApproveUser(user._id)}>
+                                                        <Button size='sm' variant="success" title='approve' onClick={() => handleApproveUser(user._id)}>
                                                             <RiCheckFill />
                                                         </Button>) : (
-                                                        <Button variant="warning" title='reject' onClick={() => handleRejectUser(user._id)}>
+                                                        <Button size='sm' variant="warning" title='reject' onClick={() => handleRejectUser(user._id)}>
                                                             <RiCloseCircleFill />
                                                         </Button>
                                                     )}
-                                                    <Button variant="danger" title='Delete' onClick={() => handleDeleteUser(user._id)}>
+                                                    <Button size='sm' variant="danger" title='Delete' onClick={() => handleDeleteUser(user._id)}>
                                                         <RiDeleteBinFill />
                                                     </Button>
                                                 </>

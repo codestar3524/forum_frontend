@@ -9,15 +9,15 @@ import moment from "moment";
 import SkeletonCommentsTab from "../../Skeletons/SkeletonCommentsTab";
 
 const CommentsTab = () => {
-  const { username } = useParams();
+  const { _id } = useParams();
   const dispatch = useDispatch();
   let { userComments, commentsIsLoading } = useSelector(
     (state) => state.profile
   );
 
   useMemo(() => {
-    dispatch(getUserComments(username));
-  }, [dispatch, username]);
+    dispatch(getUserComments(_id));
+  }, [dispatch, _id]);
 
   return useMemo(() => {
     return (

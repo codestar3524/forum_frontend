@@ -42,7 +42,7 @@ const TopContributorsCard = () => {
             >
               <Image src={user?.author?.avatar?.url} />
               <h5 className="user">
-                {user?.author?.firstName} {user?.author?.lastName}
+                {user?.author?.username}
               </h5>
               <span className="user-stats d-flex align-items-center">
                 <RiBallPenFill />
