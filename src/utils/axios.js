@@ -1,7 +1,8 @@
 import axios from "axios";
 
+// baseURL: "https://localhost:5000",
 const instance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://forum-backend-owu7.onrender.com",
   withCredentials: true,
   timeout: 10000,
   delayed: true,
