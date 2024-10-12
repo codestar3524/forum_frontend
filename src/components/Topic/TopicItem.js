@@ -38,7 +38,7 @@ const TopicItem = ({ topic }) => {
           className="d-flex align-items-center justify-content-center flex-column"
         >
           <Image src={topic?.owner?.avatar?.url} />
-          <h6 className="writer">{`${topic?.owner?.firstName} ${topic?.owner?.lastName}`}</h6>
+          <h6 className="writer">{`${topic?.owner?.username}`}</h6>
         </div>
 
       </div>
