@@ -117,7 +117,7 @@ const EditProfile = () => {
                     <section>
                       <h5 className="section-title">basic info</h5>
                       <div className="section-content">
-                        <Row className="mb-3">
+                        {/* <Row className="mb-3">
                           <Form.Group className="form-group" as={Col}>
                             <Form.Control
                               type="text"
@@ -138,7 +138,7 @@ const EditProfile = () => {
                             />
                             <Form.Label>last name</Form.Label>
                           </Form.Group>
-                        </Row>
+                        </Row> */}
                         <Form.Group className="form-group mb-3">
                           <Form.Control
                             type="text"
@@ -162,7 +162,7 @@ const EditProfile = () => {
                       </div>
                     </section>
                     <section>
-                      <h5 className="section-title">about</h5>
+                      {/* <h5 className="section-title">about</h5>
                       <div className="section-content">
                         <Form.Group className="form-group mb-3">
                           <Form.Control
@@ -174,7 +174,7 @@ const EditProfile = () => {
                           />
                           <Form.Label>biography</Form.Label>
                         </Form.Group>
-                      </div>
+                      </div> */}
                     </section>
                     <section>
                       <h5 className="section-title">security</h5>

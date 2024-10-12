@@ -7,11 +7,12 @@ import {
 } from "react-icons/ri";
 import { SiGooglemessages } from "react-icons/si";
 import { TiGroup } from "react-icons/ti";
-import { FaUserCheck, FaThumbsUp } from "react-icons/fa";
+import { FaUserCheck, FaThumbsUp, FaBitcoin } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../redux/slices/profileSlice";
 import FollowButton from "./FollowButton";
 import SkeletonProfileHeader from "../Skeletons/SkeletonProfileHeader";
+import CountUp from "react-countup";
 
 const ProfileHeader = memo(() => {
   const { _id } = useParams();
@@ -24,11 +25,11 @@ const ProfileHeader = memo(() => {
   // useEffect(() => {
   //   if (username) document.title = `${username} Profile | ONetwork Forum`;
   // }, [username]);
-  
+
   useMemo(() => {
     dispatch(getUserProfile(_id));
   }, [dispatch, _id]);
-  
+
   // eslint-disable-next-line
   return useMemo(() => {
     if (profileIsLoading) {
@@ -42,7 +43,7 @@ const ProfileHeader = memo(() => {
       return (
         <div className="profile-header">
           <div
-            className="user-profile-meta d-flex align-items-center"
+            className="user-profile-meta d-flex"
             style={{
               backgroundImage: `linear-gradient(rgb(0 3 152 / 74%), rgb(123 25 195 / 68%)), url(wallpaper.jpg), url(${userProfile?.cover?.url})`,
             }}
@@ -55,11 +56,11 @@ const ProfileHeader = memo(() => {
             </Link>
             <div className="user-info d-flex flex-column">
               <h4 className="user-name">{`${userProfile?.firstName} ${userProfile?.lastName}`}</h4>
-              <div className="user-bio">{userProfile?.bio}</div>
+              {/* <div className="user-bio">{userProfile?.bio}</div> */}
               <div className="user-meta">
-                <span className="user-id">#{userProfile?.username}</span>
-                <span className="username">@{userProfile?.email}</span>
-                <span className="user-website">sphinxo.dev</span>
+                {/* <span className="user-id">{userProfile?.username}</span> */}
+                {/* <span className="username">{userProfile?.email}</span> */}
+                {/* <span className="user-website">sphinxo.dev</span> */}
               </div>
               <div className="user-actions">
                 {_id === loggedUser && (
@@ -73,9 +74,20 @@ const ProfileHeader = memo(() => {
                 <FollowButton passedUser={userProfile} />
               </div>
             </div>
+            <div className="d-flex align-items-center token-number">
+              <FaBitcoin />
+              <CountUp
+                className="account-balance"
+                start={0}
+                end={49500}
+                duration={1}
+                useEasing={true}
+                separator=","
+              />
+            </div>
           </div>
           <div className="profile-header-section">
-           
+
             <Nav as="ul" className="profile-menu">
               <Nav.Link
                 as={Link}
@@ -110,7 +122,7 @@ const ProfileHeader = memo(() => {
                 </div>
                 Comments
               </Nav.Link>
-              <Nav.Link
+              {/* <Nav.Link
                 as={Link}
                 to={`/user/${userProfile?._id}/following`}
                 eventKey="following"
@@ -131,7 +143,7 @@ const ProfileHeader = memo(() => {
                   <TiGroup />
                 </div>
                 Followers
-              </Nav.Link>
+              </Nav.Link> */}
             </Nav>
           </div>
         </div>

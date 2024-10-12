@@ -36,10 +36,14 @@ const TopHelpersCard = () => {
         {!herlpersIsLoading &&
           topHelpers?.length > 0 &&
           topHelpers?.map((user, idx) => (
-            <Link
+            // <Link
+            //   key={idx}
+            //   className="nav-link d-flex align-items-center"
+            //   to={`/user/${user?._id}`}
+            // >
+            <div
               key={idx}
               className="nav-link d-flex align-items-center"
-              to={`/user/${user?._id}`}
             >
               <Image src={user?.author?.avatar?.url} />
               <h5 className="user">
@@ -49,7 +53,7 @@ const TopHelpersCard = () => {
                 <SiGooglemessages />
                 {user?.count}
               </span>
-            </Link>
+            </div>
           ))}
       </Nav>
     );

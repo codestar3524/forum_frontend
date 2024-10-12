@@ -35,10 +35,14 @@ const TopContributorsCard = () => {
         {!topContributorsIsLoading &&
           topContributors?.length > 0 &&
           topContributors?.map((user, idx) => (
-            <Link
+            // <Link
+            //   key={idx}
+            //   className="nav-link d-flex align-items-center"
+            //   to={`/user/${user?._id}`}
+            // >
+            <div
               key={idx}
               className="nav-link d-flex align-items-center"
-              to={`/user/${user?._id}`}
             >
               <Image src={user?.author?.avatar?.url} />
               <h5 className="user">
@@ -48,7 +52,7 @@ const TopContributorsCard = () => {
                 <RiBallPenFill />
                 {user?.count}
               </span>
-            </Link>
+            </div>
           ))}
       </Nav>
     );

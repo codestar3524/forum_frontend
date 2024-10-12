@@ -1,8 +1,8 @@
 import { Nav, Button, Image } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { BsFillTagFill } from "react-icons/bs";
+import { BsFillTagFill,BsBack } from "react-icons/bs";
 import { GiPlayButton } from "react-icons/gi";
-import { FaEye, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { FaEye, FaThumbsUp, FaThumbsDown, FaBackward } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import moment from "moment";
 import {
@@ -33,16 +33,21 @@ const TopicContent = ({ topic, onDeleting }) => {
     <>
 
       <div className="topic-item-content">
+        <Button onClick={()=>window.history.back()} className="top-content-back btn btn-sm btn-danger">
+          <FaBackward /> Back to Forum</Button>
         <h4 className="topic-title">{topic?.title}</h4>
         <div className="topic-meta d-flex align-items-center">
           <div className="topic-writer d-flex align-items-center">
-            <Link
+            {/* <Link
               className="d-flex align-items-center justify-content-center"
               to={`/user/${topic?.owner?.username}`}
+            > */}
+            <div
+              className="d-flex align-items-center justify-content-center"
             >
               <Image src={topic?.owner?.avatar?.url} />
               <h5 className="writer">{`${topic?.owner?.firstName} ${topic?.owner?.lastName}`}</h5>
-            </Link>
+            </div>
             <p className="topic-date">
               Posted{" "}
               {moment
