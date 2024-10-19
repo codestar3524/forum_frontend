@@ -81,7 +81,7 @@ export const logout = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (
-    { username, email, password, firstName, lastName },
+    { username, email, password, firstName, lastName,walletAddress },
     { rejectWithValue }
   ) => {
     try {
@@ -91,6 +91,7 @@ export const register = createAsyncThunk(
         password,
         firstName,
         lastName,
+        walletAddress
       });
       return data;
     } catch (err) {

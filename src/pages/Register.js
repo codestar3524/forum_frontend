@@ -4,7 +4,6 @@ import {
   Col,
   Form,
   Button,
-  Image,
   Card,
   InputGroup,
 } from "react-bootstrap";
@@ -15,6 +14,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { MdAlternateEmail } from "react-icons/md";
 import { SlLock } from "react-icons/sl";
 import { register, resetRegister } from "../redux/slices/authSlice";
+import Web3 from "web3"; // Import Web3.js
 
 const Register = () => {
   useEffect(() => {
@@ -26,6 +26,9 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [walletAddress, setWalletAddress] = useState(""); // State to store wallet address
+  const [web3, setWeb3] = useState(null); // State to store Web3 instance
+  const [metaMaskError, setMetaMaskError] = useState(""); // State to store MetaMask error message
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -33,13 +36,47 @@ const Register = () => {
     (state) => state.auth.register
   );
 
+  // Function to initialize Web3 and connect MetaMask
+  const connectMetaMask = async () => {
+    if (window.ethereum) {
+      try {
+        // Initialize Web3 with MetaMask's provider
+        const web3Instance = new Web3(window.ethereum);
+        setWeb3(web3Instance);
+
+        // Request account access
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const wallet = accounts[0]; // Get the first account (wallet address)
+        setWalletAddress(wallet); // Set wallet address state
+        setMetaMaskError(""); // Clear error if connection is successful
+        console.log(wallet);
+        
+        return wallet;
+      } catch (err) {
+        console.error("User denied account access or error:", err);
+        setMetaMaskError("User denied MetaMask connection."); // Set error message for denied connection
+        return null;
+      }
+    } else {
+      console.error("MetaMask is not installed.");
+      setMetaMaskError("MetaMask is not installed. Please install MetaMask to continue.");
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || !email || !password || !firstName || !lastName) return;
-    try {
-      dispatch(register({ username, email, password, firstName, lastName }));
-    } catch (err) {
-      console.log(err.message);
+
+    const wallet = await connectMetaMask(); // Connect to MetaMask
+
+    if (wallet) {
+      try {
+        // Dispatch register action with wallet address
+        dispatch(register({ username, email, password, firstName, lastName, walletAddress }));
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   };
 
@@ -64,7 +101,7 @@ const Register = () => {
               {isLoading && <div className="loader"></div>}
               <h3 className="text-center">Register</h3>
               <p className="text-center">
-              Welcome to Forum
+                Welcome to Forum
               </p>
               {message && (
                 <div
@@ -75,8 +112,13 @@ const Register = () => {
                   {message}
                 </div>
               )}
+              {metaMaskError && ( // Display MetaMask error
+                <div className="alert alert-danger" role="alert">
+                  {metaMaskError}
+                </div>
+              )}
               <Form.Group>
-                <Form.Label for="firstName">First Name:</Form.Label>
+                <Form.Label htmlFor="firstName">First Name:</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <HiOutlineUser />
@@ -93,7 +135,7 @@ const Register = () => {
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label for="lastName">Last Name:</Form.Label>
+                <Form.Label htmlFor="lastName">Last Name:</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <HiOutlineUsers />
@@ -110,7 +152,7 @@ const Register = () => {
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label for="username">Username:</Form.Label>
+                <Form.Label htmlFor="username">Username:</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <MdAlternateEmail />
@@ -127,7 +169,7 @@ const Register = () => {
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label for="email">E-mail Address:</Form.Label>
+                <Form.Label htmlFor="email">E-mail Address:</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <HiOutlineMail />
@@ -144,7 +186,7 @@ const Register = () => {
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label for="password">Password:</Form.Label>
+                <Form.Label htmlFor="password">Password:</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <SlLock />
