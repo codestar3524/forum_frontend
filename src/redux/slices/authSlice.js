@@ -52,9 +52,9 @@ const initialState = {
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ username, walletAddress }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post("/login", { email, password });
+      const { data } = await axios.post("/login", { username, walletAddress });
       return data;
     } catch (err) {
       return rejectWithValue(
@@ -81,13 +81,12 @@ export const logout = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (
-    { username, email, password, firstName, lastName,walletAddress },
+    { username, password, firstName, lastName,walletAddress },
     { rejectWithValue }
   ) => {
     try {
       const { data } = await axios.post("/register", {
         username,
-        email,
         password,
         firstName,
         lastName,

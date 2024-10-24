@@ -18,7 +18,7 @@ const Home = () => {
 
   // Destructure necessary data from Redux state
   const { topics, getAllTopicsIsLoading, totalTopics } = useSelector((state) => state.topic);
-  const { username, email } = useSelector((state) => state.auth.user);
+  const { username, email } = useSelector((state) => state.auth.user || {});
   const { sortOption, searchQuery, searchUser } = useSelector((state) => state.topic);
 
   // Pagination state

@@ -45,7 +45,7 @@ const ProfileHeader = memo(() => {
           <div
             className="user-profile-meta d-flex"
             style={{
-              backgroundImage: `linear-gradient(rgb(0 3 152 / 74%), rgb(123 25 195 / 68%)), url(wallpaper.jpg), url(${userProfile?.cover?.url})`,
+              backgroundImage: `linear-gradient(rgb(0 3 152 / 33%), rgb(25 139 195 / 38%)), url(${userProfile?.cover?.url})`,
             }}
           >
             <Link

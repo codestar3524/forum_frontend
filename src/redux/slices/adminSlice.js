@@ -50,8 +50,8 @@ export const approveUser = createAsyncThunk(
         const response = await axios.put(`/api/user/${userId}/approve`);
         return response.data.user;
       } catch (error) {
-        return rejectWithValue(error.response.data);
-      }
+        return rejectWithValue(error.response?.data?.message || 'Something wrong!');  
+    }
     }
   );
   
@@ -63,7 +63,7 @@ export const approveUser = createAsyncThunk(
         const response = await axios.put(`/api/user/${userId}/reject`);
         return response.data.user;
       } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response?.data?.message || 'Something Wrong!');  
       }
     }
   );
@@ -151,7 +151,8 @@ const adminSlice = createSlice({
             .addCase(updateUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
-            }).addCase(approveUser.fulfilled, (state, action) => {
+            })
+            .addCase(approveUser.fulfilled, (state, action) => {
                 const updatedUser = action.payload;
                 const index = state.users.findIndex((user) => user._id === updatedUser._id);
                 if (index !== -1) {

@@ -1,5 +1,9 @@
+// UserManage.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Form, Table, Button, Pagination, Container, Row, Col, Alert } from 'react-bootstrap';
+import { RiEdit2Fill, RiCheckFill, RiCloseCircleFill, RiDeleteBinFill, RiSave3Fill, RiArrowGoBackFill } from "react-icons/ri";
+import Layout from "./Layout";
 import {
     fetchUsers,
     setSearch,
@@ -8,89 +12,53 @@ import {
     setEditingUserId,
     resetEditForm,
     updateUser,
-    approveUser,    // Import the approve user action
-    rejectUser,     // Import the reject user action
-    deleteUser      // Import the delete user action
+    approveUser,
+    rejectUser,
+    deleteUser
 } from '../../redux/slices/adminSlice';
-import { Form, Table, Button, Pagination, Container, Row, Col, Alert } from 'react-bootstrap';
-import { RiEdit2Fill, RiCheckFill, RiCloseCircleFill, RiDeleteBinFill , RiSave3Fill, RiArrowGoBackFill } from "react-icons/ri";
 
-import Layout from "./Layout";
+// Import Notify component and functions
+import Notify, { notifySuccess, notifyError } from '../../components/Notify';
 
 const UserManage = () => {
     const dispatch = useDispatch();
-
-    // Get the state from the Redux store
-    const {
-        users,
-        currentPage,
-        totalPages,
-        search,
-        editingUserId,
-        editForm,
-        isLoading,
-        error,
-    } = useSelector((state) => state.admin);
+    const { users, currentPage, totalPages, search, editingUserId, editForm, isLoading, error } = useSelector((state) => state.admin);
+    const { _id } = useSelector((state) => state.auth.user || {});
 
     // Fetch users when the component mounts or when search/page changes
     useEffect(() => {
         dispatch(fetchUsers({ search, page: currentPage }));
     }, [search, currentPage, dispatch]);
 
-    // Handle search input
-    const handleSearchChange = (e) => {
-        dispatch(setSearch(e.target.value));
-        dispatch(setCurrentPage(1)); // Reset to page 1 on new search
-    };
-
-    // Handle page change
-    const handlePageChange = (page) => {
-        dispatch(setCurrentPage(page));
-    };
-
-    // Handle edit button click
-    const handleEditClick = (user) => {
-        dispatch(setEditingUserId(user._id));
-        dispatch(setEditForm({
-            username: user.username,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-        }));
-    };
-
-    // Handle cancel edit
-    const handleCancelEdit = () => {
-        dispatch(resetEditForm());
-    };
-
-    // Handle form input change
-    const handleFormChange = (e) => {
-        dispatch(setEditForm({ [e.target.name]: e.target.value }));
-    };
-
-    // Handle save user update
-    const handleSaveUser = (userId) => {
-        dispatch(updateUser({ userId, formData: editForm }));
-    };
-
     // Handle approve user
-    const handleApproveUser = (userId) => {
-        dispatch(approveUser({ userId }));
+    const handleApproveUser = async (userId) => {
+        const resultAction = await dispatch(approveUser({ userId }));
+        if(approveUser.fulfilled.match(resultAction)) {
+            notifySuccess("The user is approved and is given 10 tokens.")
+        }
     };
 
     // Handle reject user
-    const handleRejectUser = (userId) => {
-        dispatch(rejectUser({ userId }));
+    const handleRejectUser = async (userId) => {
+        const resultAction = dispatch(rejectUser({ userId }));
+        if(rejectUser.fulfilled.match(resultAction)) {
+            notifyError("User rejected!")
+        }
     };
 
     // Handle delete user
-    const handleDeleteUser = (userId) => {
-        dispatch(deleteUser({ userId }));
+    const handleDeleteUser = async (userId) => {
+        const resultAction = await dispatch(deleteUser({ userId }));
+        if (deleteUser.fulfilled.match(resultAction)) {
+            notifySuccess('User is deleted successfully! His tokens have been confiscated.');
+        } else {
+            notifyError('Failed to delete user!');
+        }
     };
 
     return (
         <Layout>
+            <Notify />
             <Container>
                 <Row className="mb-4">
                     <Col>
@@ -106,145 +74,116 @@ const UserManage = () => {
                             className='search-control'
                             placeholder="Search users..."
                             value={search}
-                            onChange={handleSearchChange}
+                            onChange={(e) => {
+                                dispatch(setSearch(e.target.value));
+                                dispatch(setCurrentPage(1)); // Reset to page 1 on new search
+                            }}
                         />
                     </Col>
                 </Row>
+                {error && <Alert variant="danger">{error}</Alert>}
 
                 {/* User Table */}
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
-                    <>
-                        <Table variant="dark" striped bordered hover>
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Status</th> {/* New Approve Status column */}
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {users.map((user) => (
+                    <Table variant="dark" striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.map((user) => (
+                                user._id !== _id && (
                                     <tr key={user._id}>
-                                        <td>
-                                            {editingUserId === user._id ? (
-                                                <Form.Control
-                                                    type="text"
-                                                    name="username"
-                                                    value={editForm.username}
-                                                    onChange={handleFormChange}
-                                                />
-                                            ) : (
-                                                user.username
-                                            )}
+                                        <td>{editingUserId === user._id ? (
+                                            <Form.Control
+                                                type="text"
+                                                name="username"
+                                                value={editForm.username}
+                                                onChange={(e) => dispatch(setEditForm({ [e.target.name]: e.target.value }))}
+                                            />
+                                        ) : (
+                                            user.username
+                                        )}
                                         </td>
-                                        <td>
-                                            {editingUserId === user._id ? (
-                                                <Form.Control
-                                                    type="email"
-                                                    name="email"
-                                                    value={editForm.email}
-                                                    onChange={handleFormChange}
-                                                />
-                                            ) : (
-                                                user.email
-                                            )}
+                                        <td>{editingUserId === user._id ? (
+                                            <Form.Control
+                                                type="text"
+                                                name="firstName"
+                                                value={editForm.firstName}
+                                                onChange={(e) => dispatch(setEditForm({ [e.target.name]: e.target.value }))}
+                                            />
+                                        ) : (
+                                            user.firstName
+                                        )}
                                         </td>
-                                        <td>
-                                            {editingUserId === user._id ? (
-                                                <Form.Control
-                                                    type="text"
-                                                    name="firstName"
-                                                    value={editForm.firstName}
-                                                    onChange={handleFormChange}
-                                                />
-                                            ) : (
-                                                user.firstName
-                                            )}
+                                        <td>{editingUserId === user._id ? (
+                                            <Form.Control
+                                                type="text"
+                                                name="lastName"
+                                                value={editForm.lastName}
+                                                onChange={(e) => dispatch(setEditForm({ [e.target.name]: e.target.value }))}
+                                            />
+                                        ) : (
+                                            user.lastName
+                                        )}
                                         </td>
-                                        <td>
-                                            {editingUserId === user._id ? (
-                                                <Form.Control
-                                                    type="text"
-                                                    name="lastName"
-                                                    value={editForm.lastName}
-                                                    onChange={handleFormChange}
-                                                />
-                                            ) : (
-                                                user.lastName
-                                            )}
-                                        </td>
-                                        <td>
-                                            {user.approved ? <div className='user-status approved'></div> : <div className="user-status pending"></div>}
-                                        </td> {/* Display approve, reject, or pending */}
+                                        <td>{user.approved ? 'Approved' : 'Pending'}</td>
                                         <td>
                                             {editingUserId === user._id ? (
                                                 <>
-                                                    <Button size='sm' variant="success" title='Save' onClick={() => handleSaveUser(user._id)}>
+                                                    <Button size='sm' variant="success" onClick={() => dispatch(updateUser({ userId: user._id, formData: editForm }))}>
                                                         <RiSave3Fill />
                                                     </Button>
-                                                    <Button size='sm' variant="danger" title='Cancel' onClick={handleCancelEdit}>
+                                                    <Button size='sm' variant="danger" onClick={() => dispatch(resetEditForm())}>
                                                         <RiArrowGoBackFill />
                                                     </Button>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Button size='sm' variant="primary" title='Edit' onClick={() => handleEditClick(user)}>
+                                                    <Button size='sm' variant="primary" onClick={() => dispatch(setEditingUserId(user._id))}>
                                                         <RiEdit2Fill />
                                                     </Button>
                                                     {!user.approved ? (
-                                                        <Button size='sm' variant="success" title='approve' onClick={() => handleApproveUser(user._id)}>
+                                                        <Button size='sm' variant="success" onClick={() => handleApproveUser(user._id)}>
                                                             <RiCheckFill />
-                                                        </Button>) : (
-                                                        <Button size='sm' variant="warning" title='reject' onClick={() => handleRejectUser(user._id)}>
+                                                        </Button>
+                                                    ) : (
+                                                        <Button size='sm' variant="warning" onClick={() => handleRejectUser(user._id)}>
                                                             <RiCloseCircleFill />
                                                         </Button>
                                                     )}
-                                                    <Button size='sm' variant="danger" title='Delete' onClick={() => handleDeleteUser(user._id)}>
+                                                    <Button size='sm' variant="danger" onClick={() => handleDeleteUser(user._id)}>
                                                         <RiDeleteBinFill />
                                                     </Button>
                                                 </>
                                             )}
                                         </td>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
-                    </>
+                                )
+                            ))}
+                        </tbody>
+                    </Table>
                 )}
 
                 {/* Pagination Controls */}
-                {
-                    totalPages > 1 && (
-                        <Pagination className="my-1">
-                            <Pagination.First
-                                onClick={() => handlePageChange(1)}
-                                disabled={currentPage === 1}
-                            />
-                            <Pagination.Prev
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                            />
-                            <input className="page-count" type="number" min={1} max={totalPages} value={currentPage} onChange={(e) => handlePageChange(e.target.value)} />
-
-                            <Pagination.Next
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                            />
-                            <Pagination.Last
-                                onClick={() => handlePageChange(totalPages)}
-                                disabled={currentPage === totalPages}
-                            />
-                        </Pagination>
-                    )
-                }
+                {totalPages > 1 && (
+                    <Pagination className="my-1">
+                        <Pagination.First onClick={() => dispatch(setCurrentPage(1))} disabled={currentPage === 1} />
+                        <Pagination.Prev onClick={() => dispatch(setCurrentPage(currentPage - 1))} disabled={currentPage === 1} />
+                        <input type="number" min={1} max={totalPages} value={currentPage} onChange={(e) => dispatch(setCurrentPage(Number(e.target.value)))} />
+                        <Pagination.Next onClick={() => dispatch(setCurrentPage(currentPage + 1))} disabled={currentPage === totalPages} />
+                        <Pagination.Last onClick={() => dispatch(setCurrentPage(totalPages))} disabled={currentPage === totalPages} />
+                    </Pagination>
+                )}
 
                 {/* Error Handling */}
-                {error && <Alert variant="danger">{error}</Alert>}
             </Container>
         </Layout>
     );

@@ -6,15 +6,17 @@ import {
   Button,
   Card,
   InputGroup,
+  Image
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { HiOutlineUser, HiOutlineUsers } from "react-icons/hi2";
-import { HiOutlineMail } from "react-icons/hi";
-import { MdAlternateEmail } from "react-icons/md";
-import { SlLock } from "react-icons/sl";
+import { HiOutlineUser, HiOutlineUsers } from "react-icons/hi";
+import { MdAlternateEmail, MdWallet } from "react-icons/md";
+import { SlWallet } from "react-icons/sl";
 import { register, resetRegister } from "../redux/slices/authSlice";
 import Web3 from "web3"; // Import Web3.js
+import MetaMaskIcon from "../assets/images/SVG_MetaMask_Icon_Color.svg";
+
 
 const Register = () => {
   useEffect(() => {
@@ -22,8 +24,6 @@ const Register = () => {
   }, []);
 
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [walletAddress, setWalletAddress] = useState(""); // State to store wallet address
@@ -50,7 +50,7 @@ const Register = () => {
         setWalletAddress(wallet); // Set wallet address state
         setMetaMaskError(""); // Clear error if connection is successful
         console.log(wallet);
-        
+
         return wallet;
       } catch (err) {
         console.error("User denied account access or error:", err);
@@ -66,14 +66,16 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username || !email || !password || !firstName || !lastName) return;
+    console.log(username, walletAddress, firstName, lastName);
+    if (!username || !walletAddress || !firstName || !lastName) return;
 
     const wallet = await connectMetaMask(); // Connect to MetaMask
 
     if (wallet) {
       try {
+
         // Dispatch register action with wallet address
-        dispatch(register({ username, email, password, firstName, lastName, walletAddress }));
+        dispatch(register({ username, walletAddress, firstName, lastName }));
       } catch (err) {
         console.log(err.message);
       }
@@ -99,15 +101,14 @@ const Register = () => {
           <Card.Body>
             <Form onSubmit={handleSubmit}>
               {isLoading && <div className="loader"></div>}
-              <h3 className="text-center">Register</h3>
+              <h3 className="text-center">登 记</h3>
               <p className="text-center">
-                Welcome to Forum
+                欢迎来到我们的论坛
               </p>
               {message && (
                 <div
-                  className={`message ${isError ? "error" : ""} ${
-                    isSuccess ? "success" : ""
-                  } ${isLoading ? "info" : ""}`}
+                  className={`message ${isError ? "error" : ""} ${isSuccess ? "success" : ""
+                    } ${isLoading ? "info" : ""}`}
                 >
                   {message}
                 </div>
@@ -118,7 +119,7 @@ const Register = () => {
                 </div>
               )}
               <Form.Group>
-                <Form.Label htmlFor="firstName">First Name:</Form.Label>
+                <Form.Label htmlFor="firstName">名字：</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <HiOutlineUser />
@@ -128,14 +129,15 @@ const Register = () => {
                     name="firstName"
                     id="firstName"
                     disabled={isLoading}
-                    placeholder="John"
+                    placeholder="输入名字"
                     value={firstName}
+                    required
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="lastName">Last Name:</Form.Label>
+                <Form.Label htmlFor="lastName">姓氏：</Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <HiOutlineUsers />
@@ -145,14 +147,15 @@ const Register = () => {
                     name="lastName"
                     id="lastName"
                     disabled={isLoading}
-                    placeholder="Doe"
+                    required
+                    placeholder="输入姓氏"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="username">Username:</Form.Label>
+                <Form.Label htmlFor="username">昵称: </Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
                     <MdAlternateEmail />
@@ -162,44 +165,34 @@ const Register = () => {
                     name="username"
                     id="username"
                     disabled={isLoading}
-                    placeholder="Username"
+                    placeholder="输入昵称"
+                    required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="email">E-mail Address:</Form.Label>
+                <Form.Label htmlFor="wallet">钱包地址：</Form.Label>
                 <InputGroup className="mb-3">
-                  <InputGroup.Text id="basic-addon1">
-                    <HiOutlineMail />
-                  </InputGroup.Text>
+                {walletAddress ?
+                    <Image src={MetaMaskIcon} width={50} height={50}/> :
+                    <InputGroup.Text id="basic-addon1">
+                      <SlWallet />
+                    </InputGroup.Text>
+                  }
                   <Form.Control
-                    type="email"
-                    name="email"
-                    id="email"
-                    disabled={isLoading}
-                    placeholder="someone@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    name="wallet"
+                    id="wallet"
+                    disabled={true}
+                    required
+                    placeholder="0X.."
+                    value={walletAddress}
                   />
-                </InputGroup>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label htmlFor="password">Password:</Form.Label>
-                <InputGroup className="mb-3">
-                  <InputGroup.Text id="basic-addon1">
-                    <SlLock />
-                  </InputGroup.Text>
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    id="password"
-                    disabled={isLoading}
-                    placeholder="***********"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <Button type="button" onClick={() => connectMetaMask()}>
+                    <MdWallet />
+                  </Button>
                 </InputGroup>
               </Form.Group>
               <Button

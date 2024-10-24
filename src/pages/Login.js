@@ -10,18 +10,19 @@ import {
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SlLock } from "react-icons/sl";
+import { SlWallet } from "react-icons/sl";
 import { RiUserAddLine } from "react-icons/ri";
 import { login, resetLogin } from "../redux/slices/authSlice";
 import Web3 from "web3"; // Import Web3.js
+import MetaMaskIcon from "../assets/images/SVG_MetaMask_Icon_Color.svg";
+import Notify, { notifySuccess, notifyError } from '../components/Notify';
 
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [metaMaskError, setMetaMaskError] = useState(null);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -47,8 +48,7 @@ const Login = () => {
         const wallet = accounts[0]; // Get the first account (wallet address)
         setWalletAddress(wallet); // Set wallet address state
         setMetaMaskError(""); // Clear error if connection is successful
-        console.log(wallet);
-        
+
         return wallet;
       } catch (err) {
         console.error("User denied account access or error:", err);
@@ -64,14 +64,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) return;
+    if (!username || !walletAddress) return;
 
     const wallet = await connectMetaMask(); // Connect to MetaMask
 
     if (wallet) {
       try {
         // Dispatch register action with wallet address
-        dispatch(login({ email, password, walletAddress }));
+        const resultAction = dispatch(login({ username, walletAddress }));
+        // if (login.fulfilled.match(resultAction)) {
+        //   notifySuccess("Welcome to join!")
+        // }
       } catch (err) {
         console.log(err.message);
       }
@@ -103,9 +106,8 @@ const Login = () => {
               <p className="text-center">Welcome to Forum</p>
               {message && (
                 <div
-                  className={`message ${isError ? "error" : ""} ${
-                    isSuccess ? "success" : ""
-                  } ${isLoading ? "info" : ""}`}
+                  className={`message ${isError ? "error" : ""} ${isSuccess ? "success" : ""
+                    } ${isLoading ? "info" : ""}`}
                 >
                   {`${message} `}
                   {message?.includes("must activate") && (
@@ -119,8 +121,8 @@ const Login = () => {
                 </div>
               )}
               <Form.Group>
-                <Form.Label htmlFor="email">
-                  Username or Email Address:
+                <Form.Label htmlFor="wallet">
+                  昵称：
                 </Form.Label>
                 <InputGroup className="mb-3">
                   <InputGroup.Text id="basic-addon1">
@@ -128,34 +130,39 @@ const Login = () => {
                   </InputGroup.Text>
                   <Form.Control
                     type="text"
-                    name="email"
-                    id="email"
+                    name="wallet"
+                    id="wallet"
                     disabled={isLoading}
-                    placeholder="someone@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Jone3524"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </InputGroup>
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="password">Your Password</Form.Label>
+                <Form.Label htmlFor="wallet">钱包地址:</Form.Label>
                 <InputGroup className="mb-3">
-                  <InputGroup.Text id="basic-addon1">
-                    <SlLock />
-                  </InputGroup.Text>
+                  {walletAddress ?
+                    <Image src={MetaMaskIcon} width={50} height={50} /> :
+                    <InputGroup.Text id="basic-addon1">
+                      <SlWallet />
+                    </InputGroup.Text>
+                  }
                   <Form.Control
-                    type="password"
-                    name="password"
-                    id="password"
-                    disabled={isLoading}
+                    type="text"
+                    name="wallet"
+                    id="wallet"
+                    disabled={true}
                     placeholder="***********"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={walletAddress}
                   />
+                  <Button type="button" onClick={() => connectMetaMask()}>
+                    <SlWallet />
+                  </Button>
                 </InputGroup>
               </Form.Group>
-             
-              <div className="d-flex justify-content-between">
+
+              {/* <div className="d-flex justify-content-between">
                 <Form.Group controlId="rememberme">
                   <Form.Check
                     name="rememberme"
@@ -167,7 +174,7 @@ const Login = () => {
                 <Link className="forget-pwd" to="/forgot-password">
                   Forget password?
                 </Link>
-              </div>
+              </div> */}
               <Button
                 className="auth-submit mb-4 w-100"
                 type="submit"

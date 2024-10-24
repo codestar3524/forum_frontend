@@ -61,6 +61,9 @@ body {
   font-size: 34px;
   gap: 10px;
 }
+.Toastify__toast-body div {
+  color: black !important;
+}
 header {
   position: fixed;
   top: 0;
